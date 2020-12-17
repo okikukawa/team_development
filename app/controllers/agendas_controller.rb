@@ -1,6 +1,6 @@
 class AgendasController < ApplicationController
   before_action :set_agenda, only: %i[show edit update destroy]
-
+  before_action :ensure_current_user_agenda_check, only:[:destroy]
   def index
     @agendas = Agenda.all
   end
@@ -23,6 +23,7 @@ class AgendasController < ApplicationController
 
   def destroy
     @agenda.destroy
+    ContactMailer.contact_mail(@agenda).deliver
     redirect_to dashboard_url, notice: I18n.t('views.messages.delete_agenda')
   end
 

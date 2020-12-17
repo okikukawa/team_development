@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
     user.save!
   end
 
+  def ensure_current_user_agenda_check
+    if current_user.id != @agenda.team.owner_id && current_user.id != @agenda.user_id
+      redirect_to dashboard_url, notice: "この操作を行う権限がありません。"
+    end
+  end
+
   private
 
   def set_working_team

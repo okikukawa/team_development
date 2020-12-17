@@ -9,13 +9,13 @@ class ApplicationController < ActionController::Base
 
   def ensure_current_user_agenda_check
     if current_user.id != @agenda.team.owner_id && current_user.id != @agenda.user_id
-      redirect_to dashboard_url, notice: "この操作を行う権限がありません。"
+      redirect_to dashboard_url, notice: I18n.t('views.messages.no_authorized_to_do_this')
     end
   end
 
   def ensure_current_user_team_check
     unless current_user.id == @team.owner_id
-      redirect_to team_url(@team.id), notice: "この操作を行う権限がありません。"
+      redirect_to team_url(@team.id), notice: I18n.t('views.messages.no_authorized_to_do_this')
     end
   end
 

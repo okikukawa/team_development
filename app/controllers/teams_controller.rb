@@ -51,9 +51,11 @@ class TeamsController < ApplicationController
     #teamのowner_idをassign.user.idに変更すればOK
     team = Team.find(params[:id])
     user = User.find(params[:assigned_user])
+    owner = User.find(team.owner_id)
     team.owner_id = user.id
     if team.update(team_params)
-      ContactMailer.owner_change_mail(@team).deliver
+      OwnerChangeMailer.owner_change_mail(user, owner).deliver
+
       redirect_to team_url(@team.id), notice: "オーナー権限を移動しました。"
     else
       redirect_to team_url(@team.id), notice: "オーナー権限の移動に失敗しました。"

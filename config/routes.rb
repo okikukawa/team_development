@@ -10,13 +10,16 @@ Rails.application.routes.draw do
   resource :user
 
   resources :teams do
+    member do
+      get :owner_change
+    end
     resources :assigns, only: %w(create destroy)
     resources :agendas, shallow: true do
       resources :articles do
         resources :comments
       end
     end
-  end
 
+  end
   mount LetterOpenerWeb::Engine, at: "/letter" if Rails.env.development?
 end

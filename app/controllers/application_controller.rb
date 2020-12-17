@@ -13,6 +13,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def ensure_current_user_team_check
+    unless current_user.id == @team.owner_id
+      redirect_to team_url(@team.id), notice: "この操作を行う権限がありません。"
+    end
+  end
+
   private
 
   def set_working_team

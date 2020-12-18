@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_team, only: %i[show edit update destroy owner_change]
-
+  before_action :ensure_current_user_team_check, only: %i[edit update]
   def index
     @teams = Team.all
   end
@@ -56,9 +56,9 @@ class TeamsController < ApplicationController
     if team.update(team_params)
       OwnerChangeMailer.owner_change_mail(user, owner).deliver
 
-      redirect_to team_url(@team.id), notice: "オーナー権限を移動しました。"
+      redirect_to team_url(@team.id), notice: I18n.t('views.messages.success_transfer_owner_authority')
     else
-      redirect_to team_url(@team.id), notice: "オーナー権限の移動に失敗しました。"
+      redirect_to team_url(@team.id), notice: I18n.t('views.messages.failed_transfer_owner_authority')
     end
   end
 
